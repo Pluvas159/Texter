@@ -62,7 +62,7 @@ function Chat({ other_user_name, user_name}) {
 
             </div>
             <form className='float-left h-1/6 w-full' onSubmit = {(e) => {e.preventDefault(); {conn.postMessage(user_name, other_user_name, response, window.location.href);
-                addMessages([...messages, {sender:user_name, recipient: other_user_name, message: response}]);setResponse('')}}}>
+                if(other_user_name!='n'){addMessages([...messages, {sender:user_name, recipient: other_user_name, message: response}])};setResponse('')}}}>
 
                 <input type='text' onChange = {e => setResponse(e.target.value)} value={response} className="w-5/6 h-3/6"></input>
                 <input type='submit' className="float-right w-1/6 h-3/6"></input>
