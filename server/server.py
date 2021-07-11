@@ -12,7 +12,7 @@ from contextlib import closing
 
 app = flask.Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 
 @app.route('/api/get', methods=['GET'])    #requesting all messages in a speficied chat, specifications come from parameters in url
