@@ -3,9 +3,13 @@
 
 # SERVER
  Made in Flask
+
  runs in git bash 
+
  in the server folder:
+ 
  $ export FLASK_APP=server.py
+
  $ python -m flask run --host=0.0.0.0
 
 # CLIENT
