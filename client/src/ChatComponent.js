@@ -31,8 +31,8 @@ function Chat({ other_user_name, user_name}) {
     }
 
     useEffect(() => {                            //this function happens only on component creation
-        conn.getMessage(user_name, other_user_name, pushMessages,window.location.href)
-        const interval = setInterval(() => conn.getMessage(user_name, other_user_name, pushMessages,window.location.href), 2000);
+        conn.getMessage(user_name, other_user_name, pushMessages,window.location.hostname)
+        const interval = setInterval(() => conn.getMessage(user_name, other_user_name, pushMessages, window.location.hostname), 5000);
         try{
             scrollToBottom()}
         catch {}
@@ -61,7 +61,7 @@ function Chat({ other_user_name, user_name}) {
                 {renderMessages()}
 
             </div>
-            <form className='float-left h-1/6 w-full' onSubmit = {(e) => {e.preventDefault(); {conn.postMessage(user_name, other_user_name, response, window.location.href);
+            <form className='float-left h-1/6 w-full' onSubmit = {(e) => {e.preventDefault(); {conn.postMessage(user_name, other_user_name, response, window.location.hostname);
                 if(other_user_name!='n'){addMessages([...messages, {sender:user_name, recipient: other_user_name, message: response}])};setResponse('')}}}>
 
                 <input type='text' onChange = {e => setResponse(e.target.value)} value={response} className="w-5/6 h-3/6"></input>

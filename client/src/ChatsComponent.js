@@ -28,7 +28,7 @@ const Chats = (props) => {
 
     useEffect(() => {               //this function happens only on component creation
         conn.getChatters(props.user_name, pushChats, window.location.href)   //getting all the chats right on the creationg
-        const interval = setInterval(() => conn.getChatters(props.user_name, pushChats, window.location.href), 10000);  //updating chats list every 10s
+        const interval = setInterval(() => conn.getChatters(props.user_name, pushChats, window.location.hostname), 10000);  //updating chats list every 10s
         return () => {  //return happens on component deletion
             clearInterval(interval);
         };
@@ -43,7 +43,8 @@ const Chats = (props) => {
                 <div className='h-full'>
                     {renderChats()}
                 </div>
-                <form onSubmit={(e)=>{e.preventDefault();conn.postChat(props.user_name, chat, window.location.href);setChat('')}}>
+                <form onSubmit={(e)=>{e.preventDefault();conn.postChat(props.user_name, chat, window.location.hostname);setChat('');
+            setTimeout(()=> conn.getChatters(props.user_name, pushChats, window.location.href))}}>
                     <h1 className = "text-white font-semibold">Start chatting with:</h1>
                     <input type='text' onChange={e => setChat(e.target.value)} value ={chat} className= "lg:w-3/5 w-full"></input>
                     <input type='submit' className = "lg:w-2/5 w-full"></input>
