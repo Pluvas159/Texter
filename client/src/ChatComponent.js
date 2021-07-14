@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 
-function Chat({ other_user_name, user_name}) {
+function Chat({ other_user_name, user_name, socket, message, changeMessage }) {
     const messagesEndRef = useRef(null)
     const [response, setResponse] = useState('')
     const [messages, addMessages] = useState([{}])
@@ -30,14 +30,24 @@ function Chat({ other_user_name, user_name}) {
         messagesEndRef.current.scrollIntoView(false)
     }
 
-    useEffect(() => {                            //this function happens only on component creation
+    useEffect(() => {  
+        if (message!==''){
+            setTimeout(() => changeMessage(''), 1)
+            addMessages([...messages, {sender:other_user_name, recipient:user_name, message: message}])
+
+
+            
+        }
+        
+        
+        //this function happens only on component creation
         conn.getMessage(user_name, other_user_name, pushMessages,window.location.href)
-        const interval = setInterval(() => conn.getMessage(user_name, other_user_name, pushMessages,window.location.href), 2000);
+        //const interval = setInterval(() => conn.getMessage(user_name, other_user_name, pushMessages,window.location.href), 2000);
         try{
             scrollToBottom()}
         catch {}
         return () => {          //return happens on component deletion
-            clearInterval(interval);
+            //clearInterval(interval);
         };
       });
     
@@ -61,7 +71,7 @@ function Chat({ other_user_name, user_name}) {
                 {renderMessages()}
 
             </div>
-            <form className='float-left h-1/6 w-full' onSubmit = {(e) => {e.preventDefault(); {conn.postMessage(user_name, other_user_name, response, window.location.href);
+            <form className='float-left h-1/6 w-full' onSubmit = {(e) => {e.preventDefault(); {conn.postMessage(user_name, other_user_name, response, window.location.href); socket.emit('send-msg', response, other_user_name);
                 if(other_user_name!='n'){addMessages([...messages, {sender:user_name, recipient: other_user_name, message: response}])};setResponse('')}}}>
 
                 <input type='text' onChange = {e => setResponse(e.target.value)} value={response} className="w-5/6 h-3/6"></input>

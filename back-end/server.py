@@ -64,5 +64,9 @@ def onPostChatters():
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
+@app.route('/')
+def home():
+    return flask.render_template('index.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  #host='0.0.0.0' is for flask to listen on public port, but it doesn't work this way, you have to run the server with flask run --host=0.0.0.0

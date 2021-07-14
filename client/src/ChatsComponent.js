@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Chat from './ChatComponent'
+import { io } from 'socket.io-client'
 
 const Chats = (props) => {
     const [nameOfChat, setNameOfChat] = useState('n')
     const [chat, setChat] = useState('')
     const [chats, addChat] = useState([])
     const conn = require("./Connection.js")
+    const [socket, changeSocket] = useState(io('http://localhost:5001'))
+    const [message, changeMessage] = useState('')
     
 
     const pushChats = (chts) =>{
@@ -19,25 +22,29 @@ const Chats = (props) => {
         if (chats!=[]){
         return chats.map((chat) => {
             return (
-                <button className="float-left w-full font-semibold text-yellow-300" onClick={(e) => setNameOfChat(e.target.innerHTML)}>
-                   {chat.filter(x => x!= props.user_name)}
+                <button className="float-left w-full font-semibold text-yellow-300" onClick={(e) => {setNameOfChat(e.target.innerHTML); socket.emit('join-room', e.target.innerHTML)}}>
+                   {chat}
                 </button>
             )
         })}
     }
 
     useEffect(() => {               //this function happens only on component creation
-        conn.getChatters(props.user_name, pushChats, window.location.href)   //getting all the chats right on the creationg
-        const interval = setInterval(() => conn.getChatters(props.user_name, pushChats, window.location.href), 10000);  //updating chats list every 10s
+        socket.on('recv-msg', message =>{
+            changeMessage(message)
+            //pushMessages(message)
+        })
+        conn.getChatters(props.user_name, pushChats, window.location.href)   //getting all the chats right on the creation
+        //const interval = setInterval(() => conn.getChatters(props.user_name, pushChats, window.location.href), 10000);  //updating chats list every 10s
         return () => {  //return happens on component deletion
-            clearInterval(interval);
+            //clearInterval(interval);
         };
       }, []);
 
     return (
         <div className="h-screen">
             <div className="w-4/5 h-3/5 bg-gray-800 float-right">
-                {<Chat other_user_name={nameOfChat} user_name = {props.user_name}/>}
+                {<Chat other_user_name={nameOfChat} user_name = {props.user_name} socket = {socket} message  = {message} changeMessage = {changeMessage}/>}
             </div>
             <div className="w-1/5 h-3/5  bg-gray-700">
                 <div className='h-full'>
