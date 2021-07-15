@@ -13,7 +13,7 @@ io.on('connection', socket =>{
     })
 
     socket.on("send-msg", (message, room) => {
-        console.log(message)
+        //console.log(message)
         socket.to(room).emit('recv-msg', message)
     })
 

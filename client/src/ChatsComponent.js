@@ -10,6 +10,7 @@ const Chats = (props) => {
     const [socket, changeSocket] = useState(io('http://localhost:5001'))
     const [message, changeMessage] = useState('')
     const [received_messages, changeReceived_messages] = useState(false)
+    const [lastChat, setLastChat] = useState('')
     
 
     const pushChats = (chts) =>{
@@ -23,7 +24,7 @@ const Chats = (props) => {
         if (chats!=[]){
         return chats.map((chat) => {
             return (
-                <button className="float-left w-full font-semibold text-yellow-300" onClick={(e) => {setNameOfChat(e.target.innerHTML); socket.emit('join-room',  chat); changeReceived_messages(false)}}>
+                <button className="float-left w-full font-semibold text-yellow-300" onClick={(e) => {setNameOfChat(e.target.innerHTML); socket.emit('leave-room', lastChat); socket.emit('join-room',  chat); changeReceived_messages(false); setLastChat(chat)}}>
                    {chat.filter(x => x!= props.user_name)}
                 </button>
             )
