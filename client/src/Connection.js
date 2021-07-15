@@ -42,7 +42,7 @@ module.exports.postChat = (user_name, other_user_name, location) => {
         }
 }
 
-module.exports.getMessage = (user_name, other_user_name, pushMessage, location) => {
+module.exports.getMessage = (user_name, other_user_name, pushMessages, location) => {
         try {
             fetch(`http://${location}:5000/api/get?` + new URLSearchParams({
                 name: user_name,
@@ -53,7 +53,7 @@ module.exports.getMessage = (user_name, other_user_name, pushMessage, location) 
                     mode: "cors",
                 }).then((response) => {
                     if (response.status === 200) {
-                        response.json().then((data) => pushMessage(data))
+                        return response.json().then((data) => pushMessages(data))
                     } else {
                         alert("Message failed to send.")
                     }
